@@ -1,0 +1,4 @@
+{"tag": "MetaInfo", "value": {"type": "testcase", "value": {"name": "MakeLvCase", "metainfo": {}}}}
+{"tag": "MetaInfo", "value": {"type": "testcase", "value": {"started_at": "2018-05-18 17:52:12.636000", "name": "MakeLvCase"}}}
+{"tag": "MetaInfo", "value": {"type": "testcase", "value": {"ended_at": "2018-05-18 17:52:26.160000", "name": "MakeLvCase"}}}
+{"tag": "MetaInfo", "value": {"type": "testcase", "value": {"name": "MakeLvCase", "success": false}}}
