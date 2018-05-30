@@ -17,7 +17,12 @@ from shop import buy
 from poco.drivers.unity3d import UnityPoco
 
 def runTest():
-    init_device()
+    stop_app("com.gameholic.drawsomethingbyspider")
+    clear_app("com.gameholic.drawsomethingbyspider")
+    wake()
+    home()
+    start_app("com.gameholic.drawsomethingbyspider")
+    sleep(7)
     permissionClick()
     autoUpdate()
     login("wn10003", "z123456")

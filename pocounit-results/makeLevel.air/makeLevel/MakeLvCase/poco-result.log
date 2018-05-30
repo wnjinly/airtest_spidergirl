@@ -1,5 +1,0 @@
-{"tag": "trace", "ts": 1526637139.828, "value": {"lineno": 339, "filename": "makeLevel.air/makeLevel.py"}}
-{"tag": "runnerRuntimeLog", "ts": 1526637140.89, "value": {"content": "installed version is 37, installer version is 37. force_reinstall=False"}}
-{"tag": "runnerRuntimeLog", "ts": 1526637141.027, "value": {"content": "installed version is 0, installer version is 0. force_reinstall=False"}}
-{"tag": "trace", "ts": 1526637144.148, "value": {"lineno": 340, "filename": "makeLevel.air/makeLevel.py"}}
-{"tag": "assertion", "ts": 1526637146.159, "value": {"srcfilename": "makeLevel.air/makeLevel.py", "errtype": "NameError", "traceback": "Traceback (most recent call last):\n  File \"d:/test/spider/makeLevel.air/makeLevel.py\", line 340, in runTest\n    autoUpdate()\n  File \"D:/test/spider/login.air\\login.py\", line 25, in autoUpdate\n    while poco(\"tip1\").exists():\nNameError: global name 'poco' is not defined\n", "method": "traceback", "lineno": 340}}

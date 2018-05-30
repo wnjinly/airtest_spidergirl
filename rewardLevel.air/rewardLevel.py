@@ -16,6 +16,7 @@ using("D:/test/spider/rewardLevel.air")
 from login import Login
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 import unittest
+from poco.drivers.unity3d import UnityPoco
 
 class RewardLevelCase(Login):
     @classmethod
@@ -27,6 +28,13 @@ class RewardLevelCase(Login):
         super(RewardLevelCase, cls).tearDownClass()
     
     def setUp(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         assert("reward level test start")
 
     #进入悬赏关卡
@@ -418,7 +426,7 @@ class RewardLevelCase(Login):
         self.autoUpdate()
         self.login("wn10001", "z123456")
         self.waitLogin()
-        sleep(5)
+        sleep(7)
         player = self.getUserData()
         #进入悬赏关卡
         self.enterReward()

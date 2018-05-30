@@ -8,12 +8,13 @@ this is a test script.
 
 
 # start your script here
-from airtest.core.api import sleep,stop_app,assert_not_equal,snapshot
+from airtest.core.api import sleep,stop_app,assert_not_equal,snapshot,clear_app,wake,home,start_app
 from airtest.report.report import simple_report
 import sys
 sys.path.append("D:/test/spider/login.air")
 from login import Login
 import unittest
+from poco.drivers.unity3d import UnityPoco
 
 class MonsterBookCase(Login):
     @classmethod
@@ -26,6 +27,13 @@ class MonsterBookCase(Login):
 
 
     def setUP(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         print("monster book test start")
 
     def testMonsterBook(self):

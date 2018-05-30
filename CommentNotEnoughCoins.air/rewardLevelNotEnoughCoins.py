@@ -1,7 +1,7 @@
 # -*- coding=utf-8 -*-
 __author__ = "jingchuan.wei"
 
-from airtest.core.api import using,sleep,stop_app,snapshot
+from airtest.core.api import using,sleep,stop_app,snapshot,clear_app,wake,home,start_app
 # from airtest.report.report import simple_report
 import time
 from airtest.core.api import text,touch
@@ -10,6 +10,7 @@ using("D:/test/spider/rewardLevel.air")
 from login import Login
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 import unittest
+from poco.drivers.unity3d import UnityPoco
 
 class CommentNotEnoughCoins(Login):
     @classmethod
@@ -21,6 +22,13 @@ class CommentNotEnoughCoins(Login):
         super(CommentNotEnoughCoins, cls).tearDownClass()
 
     def setUp(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         print("test reward level no coins start")
 
     def testCommentNotEnoughCoins(self):

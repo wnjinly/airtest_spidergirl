@@ -14,6 +14,7 @@ import sys
 sys.path.append("D:/test/spider/login.air")
 from login import Login
 import unittest
+from poco.drivers.unity3d import UnityPoco
 
 
 class BasicLevelCase(Login):
@@ -25,6 +26,13 @@ class BasicLevelCase(Login):
         super(BasicLevelCase, cls).tearDownClass()
 
     def setUp(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         print("Basic level test start")
     
     def testBasicLevel(self):

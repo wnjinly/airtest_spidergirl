@@ -13,6 +13,7 @@ sys.path.append("D:/test/spider/login.air")
 from login import Login
 import unittest
 from poco.exceptions import PocoNoSuchNodeException
+from poco.drivers.unity3d import UnityPoco
 
 class RankingCase(Login):
     @classmethod
@@ -24,6 +25,13 @@ class RankingCase(Login):
         super(RankingCase, cls).tearDownClass()
 
     def setUp(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         print("rankding test start")
 
     def swipeRanking(self, rank, category):

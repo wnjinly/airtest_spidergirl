@@ -5,7 +5,7 @@ __desc__ = """
 this is a test script.
 用来测试社交模块
 """
-from airtest.core.api import sleep,clear_app,wake,home,start_app,stop_app,snapshot,Template,exists,shell,assert_exists,using,text,touch
+from airtest.core.api import sleep,clear_app,wake,home,start_app,stop_app,snapshot,Template,exists,shell,assert_exists,using,text,touch,connect_device
 # from airtest.report.report import simple_report
 import sys
 import time
@@ -15,6 +15,7 @@ from rewardLevel import RewardLevelCase
 from login import Login
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 import unittest
+from poco.drivers.unity3d import UnityPoco
 # from poco.drivers.unity3d import UnityPoco
 # poco = UnityPoco()
 
@@ -149,24 +150,32 @@ class SocialCase(RewardLevelCase):
     def addFriend(self):
         self.poco("Toggle_Friend").click()
         sleep(3)
-        self.poco("Btn_Accept").click()
-        sleep(1)
-        if self.poco("Text_Friendid").get_text() == "1005339564":
-            print("add friend successfully")
+        if self.poco("Btn_Accept").exists():
+            self.poco("Btn_Accept").click()
+            sleep(1)
+            if self.poco("Text_Friendid").get_text() == "1005339564":
+                print("add friend successfully")
 
             
     def messagesList(self):
+        sleep(5)
         items = self.poco("Bg").child("Scroll View").child("Content").child()
         contents = []
         for item in items:
-            contents.append(item.child("RightMessage(Clone)").child("Text_Content ").get_text())
+            itemName = item.get_name()
+            if itemName == "LeftMessage(Clone)":
+                contents.append(item.child("Text_Content").get_text())
+            if itemName == "RightMessage(Clone)":
+                contents.append(item.child("Text_Content").get_text())
         return contents
 
     def receiveMessagesList(self):
         items = self.poco("Bg").child("Scroll View").child("Content").child()
         contents = []
         for item in items:
-            contents.append(item.child("LeftMessage(Clone)").child("Text_Content ").get_text())
+            if item.get_name() == "LeftMessage(Clone)":
+                contents.append(item.child("Text_Content").get_text())
+        # print(contents)
         return contents
 
 
@@ -177,31 +186,31 @@ class SocialCase(RewardLevelCase):
             sleep(3)
             if self.poco("Bg").child("Top").child("Text_Title").exists():
                 print("open chat interface successfully")
-        #输入英语
-        self.poco("InputField").click()
-        sleep(1)
-        now = time.strftime('%H%M%S')
-        englishInfo = "Hello" + now
-        text(englishInfo)
-        self.textOK()
-        self.poco("Btn_Send").click()
-        sleep(2)
-        englishContents = self.messagesList()
-        if englishContents[-1] == englishInfo:
-            print("send english messages successfully")
-        
-        #输入中文
-        self.poco("InputField").click()
-        now1 = time.strftime('%H%M%S')
-        chineseInfo = "你好" + now1
-        text(chineseInfo)
-        self.textOK()
-        self.poco("Btn_Send").click()
-        sleep(2)
-        chineseContents = self.messagesList()
-        if chineseContents[-1] == chineseInfo:
-            print("send chinese successfully")
-        return chineseInfo    
+            #输入英语
+            self.poco("InputField").click()
+            sleep(1)
+            now = time.strftime('%H%M%S')
+            englishInfo = "Hello" + now
+            text(englishInfo)
+            self.textOK()
+            self.poco("Btn_Send").click()
+            sleep(2)
+            englishContents = self.messagesList()
+            if englishContents[-1] == englishInfo:
+                print("send english messages successfully")
+            
+            #输入中文
+            self.poco("InputField").click()
+            now1 = time.strftime('%H%M%S')
+            chineseInfo = "你好" + now1
+            text(chineseInfo)
+            self.textOK()
+            self.poco("Btn_Send").click()
+            sleep(2)
+            chineseContents = self.messagesList()
+            if chineseContents[-1] == chineseInfo:
+                print("send chinese successfully")
+            return chineseInfo    
             
     def delFriend(self):
         sleep(1)
@@ -227,8 +236,8 @@ class SocialCase(RewardLevelCase):
         contents = []
         items = self.poco("Content").child()
         for item in items:
-            if self.poco("Content").child("PreviewMessage(Clone)")[item].child("Text_FriendName").get_text() == "hj":
-                self.poco("Content").child("PreviewMessage(Clone)")[item].click()
+            if item.child("Text_FriendName").get_text() == "hj":
+                item.click()
                 sleep(3)
                 contents = self.receiveMessagesList()
                 return contents[-1]
@@ -241,8 +250,8 @@ class SocialCase(RewardLevelCase):
         items = self.poco("Content").child()
         sleep(2)
         for item in items:
-            if self.poco("Content").child("PreviewMessage(Clone)")[item].child("Text_FriendName").get_text() == "hj":
-                self.poco("Content").child("PreviewMessage(Clone)")[item].click()
+            if item.child("Text_FriendName").get_text() == "hj":
+                item.click()
         sleep(3)
         if self.poco("Bg").child("Top").child("Text_Title").get_text() == "hj":
             print("enter friend's chat window successfully")
@@ -259,39 +268,46 @@ class SocialCase(RewardLevelCase):
 
                         
     def receiveLevel(self):
-        positionFirst = 0
-        while positionFirst < 0.09:
-            self.poco.swipe([270.0/540, 80.0/960], [270.0/540, 780.0/960])
-            positionFirst = self.poco("Bg").child("Scroll View").child("Content").child()[1].child("Btn_Accept").get_position()[1]
-        
-        self.poco("Bg").child("Scroll View").child("Content").child()[1].child("Btn_Accept").click()
-        sleep(3)
-        if "You need to spend coins" in self.poco("lable").get_text():
-            print("pay window appears pass")
-            self.poco(text="Cancel").click()
-            sleep(1)
-            if not self.poco("lable").exists():
-                print("close pay window successfully")
-            self.poco("Bg").child("Scroll View").child("Content").child()[1].child("Btn_Accept").click()
-            sleep(3)
-            self.poco(text="OK").click()
-            sleep(2)
-            if self.poco("Hp").exists():
-                print("receive level invention successfully")
-                self.poco("Return2").click()
-                sleep(1)
-                if self.poco("lable").get_text() == "Are you sure you want to exit the game?":
-                    print("exit level window appears pass")
-                self.poco(text="Cancel").click()
-                sleep(1)    
-                if not self.poco("lable").exists():
-                    print("close exit level window pass")
-                self.poco(text="OK").click()
-                sleep(1)
-                self.poco(text="OK").click()
-                sleep(1)
-                if self.poco("Upup").exists():
-                    assert("exit level successfully")
+        items = self.poco("Bg").child("Scroll View").child("Content").child()
+        for item in items:
+            if item.get_name() == "RightShare(Clone)":
+                position = item.child("Btn_Accept").get_position()[1]
+                while position < 0.1:
+                    self.poco.swipe([270.0/540, 80.0/960], [270.0/540, 780.0/960])
+                    sleep(2)
+                    position = item.child("Btn_Accept").get_position()[1]   
+                    
+                item.child("Btn_Accept").click()
+                sleep(3)
+                if "You need to spend coins" in self.poco("lable").get_text():
+                    print("pay window appears pass")
+                    self.poco(text="Cancel").click()
+                    sleep(1)
+                    if not self.poco("lable").exists():
+                        print("close pay window successfully")
+                    self.poco("Bg").child("Scroll View").child("Content").child()[1].child("Btn_Accept").click()
+                    sleep(3)
+                    self.poco(text="OK").click()
+                    sleep(2)
+                    if self.poco("Hp").exists():
+                        print("receive level invention successfully")
+                        self.poco("Return2").click()
+                        sleep(1)
+                        if self.poco("lable").get_text() == "Are you sure you want to exit the game?":
+                            print("exit level window appears pass")
+                        self.poco(text="Cancel").click()
+                        sleep(1)    
+                        if not self.poco("lable").exists():
+                            print("close exit level window pass")
+                        self.poco("Return").click()
+                        sleep(1)
+                        self.poco(text="OK").click()
+                        sleep(1)
+                        if self.poco("InputField").exists():
+                            print("exit level successfully")
+                return
+            else:
+                print("no invite level")
 
     def ownLevel(self):
         #玩自己的关卡
@@ -381,9 +397,24 @@ class Social(SocialCase):
     #     super(Social, cls).setUpClass()
     
     def setUp(self):
-        print("test social start")
+
+        # connect_device("android:///")
+        # self.poco1 = AndroidUiautomationPoco(force_restart=False)
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()       
+
+
+    def teardown(self): 
+         stop_app("com.gameholic.drawsomethingbyspider")
+
 
     def testSocial(self):
+        print("test social start")
         self.permissionClick()
         self.autoUpdate()
         self.login("wn10001", "z123456")
@@ -418,21 +449,25 @@ class Social(SocialCase):
         self.otherInfo()
         #退出他人主页
         self.exitOtherHomePage()
+        
 
-    
+    def testAddFriend(self): 
+        print("test add friend start")
         self.permissionClick()
         self.autoUpdate()
         self.login("wn10002", "z123456")
         self.waitLogin()
         sleep(5)
         #更换账号wn10002
+        self.enterSocial()
         #添加好友
         self.addFriend()
         #聊天
         global message
         message = self.sendMessage()
 
-
+    def testDelFriend(self):
+        print("test del friend start")
         self.permissionClick()
         self.autoUpdate()
         self.login("wn10001", "z123456")
@@ -459,7 +494,7 @@ class Social(SocialCase):
         #退出聊天
         self.poco("Bg").child("Top").child("Btn_Back").click()
         sleep(1)
-        if not self.poco("Btn_ToFriendHomePage").exists():
+        if self.poco("Toggle_Message").exists():
             print("exit chat window successfully")
 
         #退出社交界面
@@ -474,16 +509,10 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     message = "start"
     suite.addTest(Social("testSocial"))
-    # suite.addTest(Social("testAddFriend"))
-    # suite.addTest(Social("testDelFriend"))
+    suite.addTest(Social("testAddFriend"))
+    suite.addTest(Social("testDelFriend"))
     runner = unittest.TextTestRunner()
     runner.run(suite)
-
-    
-
-
-
-
 
 
 

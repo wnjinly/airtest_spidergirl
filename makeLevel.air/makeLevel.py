@@ -17,6 +17,7 @@ using("D:/test/spider/makeLevel.air")
 from login import Login
 from poco.drivers.android.uiautomation import AndroidUiautomationPoco
 import unittest
+from poco.drivers.unity3d import UnityPoco
 
 class MakeLvCase(Login):
     @classmethod
@@ -29,6 +30,13 @@ class MakeLvCase(Login):
     #     stop_app("com.gameholic.drawsomethingbyspider")
 
     def setUp(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         print("make level test start")
     
     def enterMakelevel(self):

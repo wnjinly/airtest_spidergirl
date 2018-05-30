@@ -18,13 +18,7 @@ class Login(unittest.TestCase):
     def setUpClass(cls):
         connect_device("android:///")
         cls.poco1 = AndroidUiautomationPoco(force_restart=False)
-        stop_app("com.gameholic.drawsomethingbyspider")
-        clear_app("com.gameholic.drawsomethingbyspider")
-        wake()
-        home()
-        start_app("com.gameholic.drawsomethingbyspider")
-        sleep(7)
-        cls.poco = UnityPoco()
+
     
     @classmethod
     def tearDownClass(cls):
@@ -32,6 +26,13 @@ class Login(unittest.TestCase):
 
     
     def setUp(self):
+        stop_app("com.gameholic.drawsomethingbyspider")
+        clear_app("com.gameholic.drawsomethingbyspider")
+        wake()
+        home()
+        start_app("com.gameholic.drawsomethingbyspider")
+        sleep(7)
+        self.poco = UnityPoco()
         print("test start")
 
     #自动更新函数
@@ -49,7 +50,7 @@ class Login(unittest.TestCase):
             while self.poco("tip1").exists():
                 sleep(5)
                 loadingTime += 5
-                if loadingTime >=120:
+                if loadingTime >= 300:
                     if "url" in self.poco("error").get_text():
                         print("更新失败")
                         stop_app("com.gameholic.drawsomethingbyspider")

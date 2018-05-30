@@ -46,20 +46,25 @@ def buy():
             poco("copypop").child("BG").child("Button").child("Text").click()
             
     if exists(Template(r"tpl1522392116057.png", threshold=0.9, target_pos=5, rgb=False, record_pos=(-0.215, -0.074), resolution=(1440, 2560))):
-        assert("弹出购买sdk界面成功")
+        print("弹出购买sdk界面成功")
         #购买失败
         shell("input keyevent 4")
         assert_exists(Template(r"tpl1522392162168.png", threshold=0.9, target_pos=5, rgb=False, record_pos=(0.003, 0.023), resolution=(1440, 2560)), "取消购买成功")
-        assert("购买成功请手动测试")
+        print("购买成功请手动测试")
     if exists(Template(r"tpl1522399084096.png", threshold=0.9, target_pos=5, rgb=False, record_pos=(0.001, 0.015), resolution=(1440, 2560))):
-        assert("内网钻石无法购买成功")
+        print("内网钻石无法购买成功")
 
 
 
 
 
 def runTest():
-    init_device()
+    stop_app("com.gameholic.drawsomethingbyspider")
+    clear_app("com.gameholic.drawsomethingbyspider")
+    wake()
+    home()
+    start_app("com.gameholic.drawsomethingbyspider")
+    sleep(7)
     permissionClick()
     autoUpdate()
     login("wn10001", "z123456")
@@ -74,10 +79,10 @@ def runTest():
     #关闭购买去广告提示弹框
 
     if poco("BitchPopup").child("Image").child("Image").exists():
-        assert("弹出支付去广告成功")
+        print("弹出支付去广告成功")
         poco("Button").child("Text").click()
         if not poco("BitchPopup").child("Image").child("Image").exists():
-            assert("关闭弹框成功")
+            print("关闭弹框成功")
         sleep(1)
     #关闭商店
     poco("Return").click()
@@ -88,7 +93,7 @@ def runTest():
     sleep(1)
     #关闭购买去广告提示弹框
     if poco("BitchPopup").child("Image").child("Image").exists():
-        assert("弹出支付去广告成功")
+        print("弹出支付去广告成功")
         poco("Button").child("Text").click()
         sleep(1)
     #切换标签和购买
